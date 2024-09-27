@@ -37,7 +37,7 @@ class MyApp extends StatelessWidget {
   }
 }
 
-class TodoListPage extends StatefulWidget {
+class TodoListPage extends HookWidget {
   const TodoListPage({
     super.key,
     required this.title
@@ -55,31 +55,13 @@ class TodoListPage extends StatefulWidget {
   final String title;
 
   @override
-  State<TodoListPage> createState() => _TodoListPageState();
-}
-
-class _TodoListPageState extends State<TodoListPage> {
-  int _counter = 0;
-
-  void _incrementCounter() {
-    setState(() {
-      // This call to setState tells the Flutter framework that something has
-      // changed in this State, which causes it to rerun the build method below
-      // so that the display can reflect the updated values. If we changed
-      // _counter without calling setState(), then the build method would not be
-      // called again, and so nothing would appear to happen.
-      _counter++;
-    });
-  }
-
-  @override
   Widget build(BuildContext context) {
-    // This method is rerun every time setState is called, for instance as done
-    // by the _incrementCounter method above.
-    //
-    // The Flutter framework has been optimized to make rerunning build methods
-    // fast, so that you can just rebuild anything that needs updating rather
-    // than having to individually change instances of widgets.
+    final counter = useState(0);
+
+    void incrementCounter() {
+      counter.value++;
+    }
+
     return Scaffold(
       appBar: AppBar(
         // TRY THIS: Try changing the color here to a specific color (to
@@ -88,7 +70,7 @@ class _TodoListPageState extends State<TodoListPage> {
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
         // Here we take the value from the MyHomePage object that was created by
         // the App.build method, and use it to set our appbar title.
-        title: Text(widget.title),
+        title: Text(title),
       ),
       body: Center(
         // Center is a layout widget. It takes a single child and positions it
@@ -113,14 +95,14 @@ class _TodoListPageState extends State<TodoListPage> {
               'You have pushed the button this many times:',
             ),
             Text(
-              '$_counter',
+              '${counter.value}',
               style: Theme.of(context).textTheme.headlineMedium,
             ),
           ],
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
+        onPressed: () => incrementCounter(),
         tooltip: 'Increment',
         child: const Icon(Icons.add),
       ), // This trailing comma makes auto-formatting nicer for build methods.
