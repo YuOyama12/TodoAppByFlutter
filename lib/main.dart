@@ -1,16 +1,18 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(
+      const ProviderScope(child: MyApp())
+  );
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends ConsumerWidget {
   const MyApp({super.key});
 
   // This widget is the root of your application.
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
@@ -32,13 +34,13 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: const TodoListPage(title: 'Todoリスト'),
+      home: TodoListPage(title: 'Todoリスト'),
     );
   }
 }
 
-class TodoListPage extends HookWidget {
-  const TodoListPage({
+class TodoListPage extends ConsumerWidget {
+  TodoListPage({
     super.key,
     required this.title
   });
@@ -54,12 +56,12 @@ class TodoListPage extends HookWidget {
 
   final String title;
 
-  @override
-  Widget build(BuildContext context) {
-    final counter = useState(0);
+  final counterProvider = StateProvider((ref) => 0);
 
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
     void incrementCounter() {
-      counter.value++;
+      ref.watch(counterProvider.notifier).state++;
     }
 
     return Scaffold(
@@ -95,7 +97,7 @@ class TodoListPage extends HookWidget {
               'You have pushed the button this many times:',
             ),
             Text(
-              '${counter.value}',
+              '${ref.watch(counterProvider)}',
               style: Theme.of(context).textTheme.headlineMedium,
             ),
           ],
