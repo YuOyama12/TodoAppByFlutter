@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 
 void main() {
   runApp(
@@ -34,13 +35,13 @@ class MyApp extends ConsumerWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: TodoListPage(title: 'Todoリスト'),
+      home: const TodoListPage(title: 'Todoリスト'),
     );
   }
 }
 
-class TodoListPage extends ConsumerWidget {
-  TodoListPage({
+class TodoListPage extends HookConsumerWidget {
+  const TodoListPage({
     super.key,
     required this.title
   });
@@ -53,15 +54,14 @@ class TodoListPage extends ConsumerWidget {
   // case the title) provided by the parent (in this case the App widget) and
   // used by the build method of the State. Fields in a Widget subclass are
   // always marked "final".
-
   final String title;
-
-  final counterProvider = StateProvider((ref) => 0);
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final counter = useState(0);
+
     void incrementCounter() {
-      ref.watch(counterProvider.notifier).state++;
+      counter.value++;
     }
 
     return Scaffold(
@@ -97,7 +97,7 @@ class TodoListPage extends ConsumerWidget {
               'You have pushed the button this many times:',
             ),
             Text(
-              '${ref.watch(counterProvider)}',
+              '${counter.value}',
               style: Theme.of(context).textTheme.headlineMedium,
             ),
           ],
