@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:todo_app_flutter/model/todo/todo.dart';
 
 void main() {
   runApp(
@@ -35,9 +36,9 @@ class MyApp extends ConsumerWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: const TodoListPage(
+      home: TodoListPage(
         title: 'Todoリスト',
-        todoList: <String>[],
+        todoList: Todo.mockTodoList,
       ),
     );
   }
@@ -59,7 +60,7 @@ class TodoListPage extends HookConsumerWidget {
   // used by the build method of the State. Fields in a Widget subclass are
   // always marked "final".
   final String title;
-  final List<String> todoList;
+  final List<Todo> todoList;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
