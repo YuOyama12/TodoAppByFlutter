@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:todo_app_flutter/model/todo/todo.dart';
+import 'package:todo_app_flutter/widgets/todo_card.dart';
 
 void main() {
   runApp(
@@ -64,17 +64,11 @@ class TodoListPage extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final counter = useState(0);
-
     final listWidget = (todoList.isEmpty)
         ? const EmptyTodoListWidget()
       : TodoListWidget(
-            counter: counter.value
+            todoList: todoList
         );
-
-    void incrementCounter() {
-      counter.value++;
-    }
 
     return Scaffold(
       appBar: AppBar(
@@ -92,7 +86,7 @@ class TodoListPage extends HookConsumerWidget {
         child: listWidget,
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () => incrementCounter(),
+        onPressed: () => {},
         tooltip: 'Increment',
         child: const Icon(Icons.add),
       ), // This trailing comma makes auto-formatting nicer for build methods.
@@ -103,10 +97,10 @@ class TodoListPage extends HookConsumerWidget {
 class TodoListWidget extends ConsumerWidget {
   const TodoListWidget({
     super.key,
-    required this.counter
+    required this.todoList
   });
 
-  final int counter;
+  final List<Todo> todoList;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -114,16 +108,23 @@ class TodoListWidget extends ConsumerWidget {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
-        const Text(
-          'You have pushed the button this many times:',
-        ),
-        Text(
-          '$counter',
-          style: Theme
-              .of(context)
-              .textTheme
-              .headlineMedium,
-        ),
+        Expanded(
+          child: ListView.builder(
+              itemCount: todoList.length,
+              itemBuilder: (context, index) {
+                return TodoCard(
+                    todo: todoList[index],
+                    onCardClick: (todo) => {
+                      //todo: クリック処理を入れる。
+                    },
+                    onDoneClick: (todo) => {
+                      //todo: 完了処理を入れる。
+                    },
+                );
+              }
+          ),
+        )
+
       ],
     );
   }
