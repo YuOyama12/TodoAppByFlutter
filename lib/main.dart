@@ -87,17 +87,17 @@ class TodoListPage extends HookConsumerWidget {
         child: listWidget,
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () => {
+        onPressed: () {
           showDialog(
               context: context,
               builder: (_) {
                 return AddTodoDialog(
-                    onAddClick: (todoText) => {
+                    onAddClick: (todoText) {
                       //todo: 追加処理を入れる。
                     }
                 );
               }
-          )
+          );
         },
         tooltip: 'Todoを追加',
         child: const Icon(Icons.add),
@@ -126,10 +126,10 @@ class TodoListWidget extends ConsumerWidget {
               itemBuilder: (context, index) {
                 return TodoCard(
                     todo: todoList[index],
-                    onCardClick: (todo) => {
+                    onCardClick: (todo) {
                       //todo: クリック処理を入れる。
                     },
-                    onDoneClick: (todo) => {
+                    onDoneClick: (todo) {
                       //todo: 完了処理を入れる。
                     },
                 );
