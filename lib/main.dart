@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:todo_app_flutter/model/todo/todo.dart';
+import 'package:todo_app_flutter/widgets/add_todo_dialog.dart';
 import 'package:todo_app_flutter/widgets/todo_card.dart';
 
 void main() {
@@ -86,8 +87,19 @@ class TodoListPage extends HookConsumerWidget {
         child: listWidget,
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () => {},
-        tooltip: 'Increment',
+        onPressed: () => {
+          showDialog(
+              context: context,
+              builder: (_) {
+                return AddTodoDialog(
+                    onAddClick: (todoText) => {
+                      //todo: 追加処理を入れる。
+                    }
+                );
+              }
+          )
+        },
+        tooltip: 'Todoを追加',
         child: const Icon(Icons.add),
       ), // This trailing comma makes auto-formatting nicer for build methods.
     );
