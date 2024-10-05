@@ -100,8 +100,8 @@ class TodoListPage extends HookConsumerWidget {
               context: context,
               builder: (_) {
                 return AddTodoDialog(
-                    onAddClick: (title) async {
-                      await ref.read(todoListProvider.notifier).save(title, "");
+                    onAddClick: (title, description) async {
+                      await ref.read(todoListProvider.notifier).save(title, description);
                       await ref.read(todoListProvider.notifier).loadAll();
                     }
                 );

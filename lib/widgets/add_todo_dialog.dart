@@ -8,21 +8,29 @@ class AddTodoDialog extends HookConsumerWidget {
     required this.onAddClick,
   });
 
-  final Function(String) onAddClick;
+  final Function(String, String) onAddClick;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final todoTitle = useState("");
+    final todoDescription = useState("");
 
     return SimpleDialog(
       title: const Text("Todoの追加"),
       contentPadding: const EdgeInsets.all(16.0),
       children: [
         Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             const Padding(
               padding: EdgeInsets.all(8.0),
-              child: Text("Todoのタイトルを入力してください。"),
+              child: Text(
+                  "Todoのタイトルを入力してください。",
+                  style: TextStyle(
+                      color: Colors.blueGrey
+                  ),
+                  textAlign: TextAlign.left,
+              ),
             ),
             TextField(
               decoration: const InputDecoration(
@@ -31,6 +39,22 @@ class AddTodoDialog extends HookConsumerWidget {
               ),
               onChanged: (text) => todoTitle.value = text,
               autofocus: true,
+            ),
+            const Padding(
+              padding: EdgeInsets.all(8.0),
+              child: Text(
+                  "Todoの内容を入力してください。",
+                  style: TextStyle(
+                    color: Colors.blueGrey
+                  ),
+                  textAlign: TextAlign.left,
+              ),
+            ),
+            TextField(
+              decoration: const InputDecoration(
+                border: OutlineInputBorder(),
+              ),
+              onChanged: (text) => todoDescription.value = text,
             ),
           ],
         ),
@@ -45,7 +69,7 @@ class AddTodoDialog extends HookConsumerWidget {
             TextButton(
                 onPressed: todoTitle.value.isEmpty ? null
                     : () {
-                  onAddClick(todoTitle.value);
+                  onAddClick(todoTitle.value, todoDescription.value);
                   Navigator.of(context).pop();
                 },
                 child: const Text("追加")
