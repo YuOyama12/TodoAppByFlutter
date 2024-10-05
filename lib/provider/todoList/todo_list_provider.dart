@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:math';
 
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -13,20 +14,43 @@ class TodoList extends _$TodoList {
 
   final String _saveKey = "Todo";
 
-  void save(Todo todo) async {
+  Future<void> save(String todoTitle, String todoDesc) async {
+    final todo = Todo(
+        id: await _getValidTodoId(),
+        title: todoTitle,
+        description: todoDesc,
+        createdAt: DateTime.now(),
+        updatedAt: DateTime.now()
+    );
+
     final prefs = await SharedPreferences.getInstance();
     final targetList = [ ...state, todo ];
     final jsonList = targetList.map((todo) => json.encode(todo.toJson())).toList();
     prefs.setStringList(_saveKey, jsonList);
   }
 
-  void loadAll() async {
+  Future<void> loadAll() async {
+    state = await _getTodoList();
+  }
+
+  Future<List<Todo>> _getTodoList() async {
     final prefs = await SharedPreferences.getInstance();
     final jsonList = prefs.getStringList(_saveKey) ?? [];
 
-    state = jsonList.map(
+    return jsonList.map(
             (jsonStr) => Todo.fromJson(json.decode(jsonStr))
     ).toList();
+  }
+
+  Future<int> _getValidTodoId() async {
+    final todoList = await _getTodoList();
+    if(todoList.isEmpty) {
+      return 1;
+    } else {
+      final currentIds = todoList.map((todo) => todo.id).toList();
+      final currentMaxId = currentIds.reduce(max);
+      return currentMaxId + 1;
+    }
   }
 
 }

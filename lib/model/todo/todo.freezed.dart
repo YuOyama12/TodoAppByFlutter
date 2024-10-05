@@ -169,7 +169,7 @@ class __$$TodoImplCopyWithImpl<$Res>
 @JsonSerializable()
 class _$TodoImpl implements _Todo {
   const _$TodoImpl(
-      {required this.id,
+      {this.id = 0,
       required this.title,
       required this.description,
       required this.createdAt,
@@ -180,6 +180,7 @@ class _$TodoImpl implements _Todo {
       _$$TodoImplFromJson(json);
 
   @override
+  @JsonKey()
   final int id;
   @override
   final String title;
@@ -238,7 +239,7 @@ class _$TodoImpl implements _Todo {
 
 abstract class _Todo implements Todo {
   const factory _Todo(
-      {required final int id,
+      {final int id,
       required final String title,
       required final String description,
       required final DateTime createdAt,
