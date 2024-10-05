@@ -7,7 +7,7 @@ part of 'todo.dart';
 // **************************************************************************
 
 _$TodoImpl _$$TodoImplFromJson(Map<String, dynamic> json) => _$TodoImpl(
-      id: (json['id'] as num).toInt(),
+      id: (json['id'] as num?)?.toInt() ?? 0,
       title: json['title'] as String,
       description: json['description'] as String,
       createdAt: DateTime.parse(json['createdAt'] as String),

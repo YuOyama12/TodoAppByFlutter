@@ -7,7 +7,7 @@ part 'todo.g.dart';
 class Todo with _$Todo {
 
   const factory Todo({
-    required int id,
+    @Default(0) int id,
     required String title,
     required String description,
     required DateTime createdAt,
