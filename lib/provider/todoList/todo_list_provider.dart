@@ -29,6 +29,14 @@ class TodoList extends _$TodoList {
     prefs.setStringList(_saveKey, jsonList);
   }
 
+  Future<void> delete(Todo todo) async {
+    final prefs = await SharedPreferences.getInstance();
+    state.remove(todo);
+
+    final jsonList = state.map((todo) => json.encode(todo.toJson())).toList();
+    prefs.setStringList(_saveKey, jsonList);
+  }
+
   Future<void> loadAll() async {
     state = await _getTodoList();
   }

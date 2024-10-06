@@ -76,7 +76,10 @@ class TodoListPage extends HookConsumerWidget {
     final listWidget = (todoList.isEmpty)
         ? const EmptyTodoListWidget()
       : TodoListWidget(
-            todoList: todoList
+            todoList: todoList,
+            onItemDelete: (todo) async {
+              await ref.read(todoListProvider.notifier).delete(todo);
+            },
         );
 
     return Scaffold(
@@ -118,10 +121,12 @@ class TodoListPage extends HookConsumerWidget {
 class TodoListWidget extends ConsumerWidget {
   const TodoListWidget({
     super.key,
-    required this.todoList
+    required this.todoList,
+    required this.onItemDelete,
   });
 
   final List<Todo> todoList;
+  final Function(Todo) onItemDelete;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -137,6 +142,9 @@ class TodoListWidget extends ConsumerWidget {
                     todo: todoList[index],
                     onCardClick: (todo) {
                       //todo: クリック処理を入れる。
+                    },
+                    onCardDelete: (todo) {
+                      onItemDelete(todo);
                     },
                     onDoneClick: (todo) {
                       //todo: 完了処理を入れる。
