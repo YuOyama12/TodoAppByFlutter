@@ -29,7 +29,7 @@ class TodoCard extends ConsumerWidget {
       child: Padding(
         padding: padding,
         child: Dismissible(
-            key: ValueKey(todo.id),
+            key: ObjectKey(todo),
             direction: DismissDirection.endToStart,
             background: const DismissBackground(),
             confirmDismiss: (_) async {
