@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:todo_app_flutter/model/todo/todo.dart';
+import 'package:todo_app_flutter/pages/todo_list_page.dart';
 import 'package:todo_app_flutter/provider/todoList/todo_list_provider.dart';
 import 'package:todo_app_flutter/widgets/add_todo_dialog.dart';
 import 'package:todo_app_flutter/widgets/todo_card.dart';
@@ -39,139 +40,7 @@ class MyApp extends ConsumerWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: const TodoListPage(
-        title: 'Todoリスト'
-      ),
-    );
-  }
-}
-
-class TodoListPage extends HookConsumerWidget {
-  const TodoListPage({
-    super.key,
-    required this.title
-  });
-
-  // This widget is the home page of your application. It is stateful, meaning
-  // that it has a State object (defined below) that contains fields that affect
-  // how it looks.
-
-  // This class is the configuration for the state. It holds the values (in this
-  // case the title) provided by the parent (in this case the App widget) and
-  // used by the build method of the State. Fields in a Widget subclass are
-  // always marked "final".
-  final String title;
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final List<Todo> todoList = ref.watch(todoListProvider);
-
-    useEffect(() {
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        ref.read(todoListProvider.notifier).loadAll();
-      });
-      return null;
-    }, const []);
-
-    final listWidget = (todoList.isEmpty)
-        ? const EmptyTodoListWidget()
-      : TodoListWidget(
-            todoList: todoList,
-            onItemDelete: (todo) async {
-              await ref.read(todoListProvider.notifier).delete(todo);
-            },
-        );
-
-    return Scaffold(
-      appBar: AppBar(
-        // TRY THIS: Try changing the color here to a specific color (to
-        // Colors.amber, perhaps?) and trigger a hot reload to see the AppBar
-        // change color while the other colors stay the same.
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        // Here we take the value from the MyHomePage object that was created by
-        // the App.build method, and use it to set our appbar title.
-        title: Text(title),
-      ),
-      body: Center(
-        // Center is a layout listWidget. It takes a single child and positions it
-        // in the middle of the parent.
-        child: listWidget,
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          showDialog(
-              context: context,
-              builder: (_) {
-                return AddTodoDialog(
-                    onAddClick: (title, description) async {
-                      await ref.read(todoListProvider.notifier).save(title, description);
-                      await ref.read(todoListProvider.notifier).loadAll();
-                    }
-                );
-              }
-          );
-        },
-        tooltip: 'Todoを追加',
-        child: const Icon(Icons.add),
-      ), // This trailing comma makes auto-formatting nicer for build methods.
-    );
-  }
-}
-
-class TodoListWidget extends ConsumerWidget {
-  const TodoListWidget({
-    super.key,
-    required this.todoList,
-    required this.onItemDelete,
-  });
-
-  final List<Todo> todoList;
-  final Function(Todo) onItemDelete;
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: <Widget>[
-        Expanded(
-          child: ListView.builder(
-              itemCount: todoList.length,
-              itemBuilder: (context, index) {
-                return TodoCard(
-                    todo: todoList[index],
-                    onCardClick: (todo) {
-                      //todo: クリック処理を入れる。
-                    },
-                    onCardDelete: (todo) {
-                      onItemDelete(todo);
-                    },
-                    onDoneClick: (todo) {
-                      //todo: 完了処理を入れる。
-                    },
-                );
-              }
-          ),
-        )
-
-      ],
-    );
-  }
-}
-
-class EmptyTodoListWidget extends ConsumerWidget {
-  const EmptyTodoListWidget({super.key});
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-
-    return const Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: <Widget>[
-         Text(
-          'Todoリストが登録されていません。',
-        )
-      ],
+      home: const TodoListPage(),
     );
   }
 }
