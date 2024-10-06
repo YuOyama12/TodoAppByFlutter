@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:todo_app_flutter/model/todo/todo.dart';
+import 'package:todo_app_flutter/widgets/confirmation_dialog.dart';
 import 'package:todo_app_flutter/widgets/dismiss_background.dart';
 
 class TodoCard extends ConsumerWidget {
@@ -10,14 +11,14 @@ class TodoCard extends ConsumerWidget {
     this.padding = const EdgeInsets.symmetric(horizontal: 24),
     required this.todo,
     required this.onCardClick,
-    required this.onCardSwipe,
+    required this.onCardDelete,
     required this.onDoneClick
   });
 
   final EdgeInsets padding;
   final Todo todo;
   final Function(Todo) onCardClick;
-  final Function(Todo) onCardSwipe;
+  final Function(Todo) onCardDelete;
   final Function(Todo) onDoneClick;
 
   @override
@@ -30,8 +31,18 @@ class TodoCard extends ConsumerWidget {
         child: Dismissible(
             key: ValueKey(todo.id),
             direction: DismissDirection.endToStart,
-            onDismissed: (_){ onCardSwipe(todo); },
             background: const DismissBackground(),
+            confirmDismiss: (_) async {
+              final result = showConfirmationDialog(
+                  context: context,
+                  dialogTitle: "削除の確認",
+                  dialogMessage: "削除するともとに戻すことはできません。本当に削除しますか？",
+                  positiveButtonText: "削除",
+                  onPositiveClick: () { onCardDelete(todo); }
+              );
+
+              return result;
+            },
             child: Card(
               child: InkWell(
                 onTap: (){},

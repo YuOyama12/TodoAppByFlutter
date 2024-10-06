@@ -138,7 +138,7 @@ class TodoListWidget extends ConsumerWidget {
                     onCardClick: (todo) {
                       //todo: クリック処理を入れる。
                     },
-                    onCardSwipe: (todo) {
+                    onCardDelete: (todo) {
                       //todo: スワイプして削除する処理を入れる。
                     },
                     onDoneClick: (todo) {
