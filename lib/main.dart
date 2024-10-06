@@ -4,6 +4,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:todo_app_flutter/model/todo/todo.dart';
 import 'package:todo_app_flutter/pages/todo_list_page.dart';
 import 'package:todo_app_flutter/provider/todoList/todo_list_provider.dart';
+import 'package:todo_app_flutter/router.dart';
 import 'package:todo_app_flutter/widgets/add_todo_dialog.dart';
 import 'package:todo_app_flutter/widgets/todo_card.dart';
 
@@ -19,7 +20,7 @@ class MyApp extends ConsumerWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return MaterialApp(
+    return MaterialApp.router(
       title: 'Flutter Demo',
       theme: ThemeData(
         // This is the theme of your application.
@@ -40,7 +41,8 @@ class MyApp extends ConsumerWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: const TodoListPage(),
+      routerConfig: ref.watch(routerProvider),
+      builder: (_, child) => child!,
     );
   }
 }
